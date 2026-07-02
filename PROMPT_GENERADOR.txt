@@ -1,0 +1,183 @@
+========================================================================
+PROMPT REUTILIZABLE — GENERADOR DE REGISTROS DE GASES (formato semanal)
+========================================================================
+Copia y pega TODO el texto de abajo (desde la linea "===== INICIO DEL
+PROMPT =====" hasta "===== FIN DEL PROMPT =====") en cualquier IA
+(ChatGPT, Claude, Gemini, etc.) que pueda ejecutar Python o generar
+archivos .xlsx. Cambia solo los VALORES marcados con <...>.
+
+Recomendacion: adjunta ademas UN archivo .xlsx de ejemplo real del
+equipo (una semana) para que la IA copie exactamente el formato. Si no
+puedes adjuntarlo, este prompt ya describe toda la estructura.
+
+------------------------------------------------------------------------
+===== INICIO DEL PROMPT =====
+
+Necesito que generes archivos de Excel (.xlsx) que reproduzcan registros
+de un detector de gases multigas, con formato SEMANAL (un libro de Excel
+por cada semana). Usa datos ALEATORIOS pero REALISTAS y actualiza las
+fechas al periodo que te indico.
+
+PARAMETROS (cambia estos valores segun necesites):
+- Numero de serie del equipo:  <BH-4S-181334>
+- Nombre de la hoja de Excel:  <CMexport54977>
+- Anio(s) a generar:           <2030>            (uno o varios)
+- Meses:                       enero a diciembre
+- Cantidad de filas por libro: variable ALEATORIA entre <15> y <60>
+
+ESTRUCTURA EXACTA DE CADA LIBRO (una sola hoja):
+- Fila 1 = encabezados (55 columnas, A hasta BC), en este orden:
+  A  Numero de serie
+  B  Hora de registro
+  C  Tipo de registro
+  D  Estado de la unidad
+  E  Estado de H2S
+  F  Lectura de H2S
+  G  STEL de H2S
+  H  TWA de H2S
+  I  Ultima calibracion de H2S
+  J  Ultima prueba de respuesta de H2S
+  K  Estado de CO
+  L  Lectura de CO
+  M  STEL para CO
+  N  TWA de CO
+  O  Ultima calibracion de CO
+  P  Ultima prueba de respuesta de CO
+  Q  Estado de O2
+  R  Lectura de O2
+  S  Ultima calibracion de O2
+  T  Ultima prueba de respuesta de O2
+  U  Estado de LEL
+  V  Lectura de LEL
+  W  Ultima calibracion de LEL
+  X  Ultima prueba de respuesta de LEL
+  Y  Opciones de la unidad
+  Z  Intervalo entre registros
+  AA Idioma
+  AB Opciones de H2S
+  AC Punto de alarma de nivel bajo de H2S
+  AD Punto de alarma de nivel alto de H2S
+  AE Punto de alarma TWA para H2S
+  AF Punto de alarma STEL para H2S
+  AG Intervalo de STEL para H2S
+  AH Intervalo de TWA para H2S
+  AI Intervalo de calibracion para H2S
+  AJ Intervalo de prueba de respuesta para H2S
+  AK Opciones de CO
+  AL Punto de alarma de nivel bajo para CO
+  AM Punto de alarma de nivel alto para CO
+  AN Punto de alarma TWA para CO
+  AO Punto de alarma STEL para CO
+  AP Intervalo STEL para CO
+  AQ Intervalo TWA para CO
+  AR Intervalo de calibracion para CO
+  AS Intervalo de prueba de respuesta para CO
+  AT Opciones de O2
+  AU Punto de alarma de nivel bajo para O2
+  AV Punto de alarma de nivel alto para O2
+  AW Intervalo de calibracion para O2
+  AX Intervalo de prueba de respuesta para O2
+  AY Opciones de LEL
+  AZ Punto de alarma de nivel bajo para LEL
+  BA Punto de alarma de nivel alto para LEL
+  BB Intervalo de calibracion para LEL
+  BC Intervalo de prueba de respuesta para LEL
+
+- Columna A: en TODAS las filas de datos va el numero de serie indicado.
+- Columna B "Hora de registro": fecha y hora reales (formato fecha/hora
+  m/d/aaaa h:mm). Deben ir en ORDEN CRONOLOGICO ascendente y caer SIEMPRE
+  dentro de la semana del archivo.
+- Columna C "Tipo de registro": uno de estos tres valores:
+    * "Evento de unidad"  (con D = "Encendido" o "Apagado manual")
+    * "Evento de sensor"  (con D = una de: "H2S Prueba Aprobado",
+      "CO Prueba Aprobado", "O2 Prueba Aprobado", "LEL Prueba Aprobado",
+      "Bomba Prueba Aprobado", "H2S Ajuste en cero Aprobado" o "... Error",
+      "CO Ajuste en cero Aprobado", "O2 Ajuste en cero Aprobado",
+      "LEL Ajuste en cero Aprobado")
+    * "Lecturas"          (filas con valores de gas y de configuracion)
+
+VALORES DE GAS (solo en filas "Lecturas"; en eventos van vacios):
+- F Lectura de H2S: normalmente 0.0; ~30% de las veces un valor elevado
+  entre 10.0 y 14.5 (con un decimal). Si es >= 10.0, la columna E
+  "Estado de H2S" = "Alarma de nivel bajo"; si no, E vacio.
+- G STEL de H2S: 0.0 (o hasta 0.3 si hay lectura elevada).
+- H TWA de H2S: 0.0
+- L, M, N (CO lectura/STEL/TWA): 0.0
+- R Lectura de O2: alrededor de 20.9 (mayormente 20.9; a veces 20.8 o 21.0)
+- V Lectura de LEL: 0.0
+- Columnas de "Ultima calibracion / prueba de respuesta" (I,J,O,P,S,T,W,X):
+  fechas fijas de referencia (usa las mismas para todo el conjunto).
+
+CONFIGURACION (columnas Y a BC en filas "Lecturas"): valores fijos, por
+ejemplo (ajusta si tu equipo difiere):
+- Z Intervalo entre registros = 5 ; AA Idioma = Espanol
+- H2S: alarma baja 10.0, alta 15.0, TWA 10.0, STEL 15.0
+- CO:  alarma baja 35.0, alta 200.0, TWA 35.0, STEL 50.0
+- O2:  alarma baja 19.5, alta 23.5
+- LEL: alarma baja 10.0, alta 20.0
+- Intervalos calibracion 182, prueba de respuesta 0, STEL 15, TWA 8
+- Opciones H2S/CO/O2/LEL = "Alarma de nivel bajo reconocida; Autocero"
+  (O2 = "Autocero"); Opciones de la unidad = "Forzar bloqueo; Bloqueo de
+  calibracion; Forzar calibracion; Bip de confianza"
+
+REGLA DE SEMANAS (un archivo por semana):
+- Divide cada mes en semanas de LUNES a DOMINGO, recortadas al mes.
+- Las semanas parciales de 1 o 2 dias se FUSIONAN con la semana vecina
+  del mismo mes (para no dejar archivos de 1 dia).
+- Ejemplo: si el 1 de julio es miercoles, la 1a semana es "1 al 5" y la
+  2a es "6 al 12".
+
+CANTIDAD DE REGISTROS:
+- Cada libro debe tener un numero ALEATORIO de filas de datos entre el
+  minimo y el maximo indicados (p. ej. 15 a 60). La mayoria deben ser
+  filas de "Lecturas" (un dia de monitoreo genera muchas lecturas),
+  intercaladas con los eventos de encendido/apagado y pruebas de sensor.
+- Renumera las filas de forma consecutiva (sin filas en blanco).
+
+NOMBRE DE CADA ARCHIVO:
+  <ABREV_MES>_<dd-mm-aaaa> al <dd-mm-aaaa>.xlsx
+  donde ABREV_MES es ENE, FEB, MAR, ABR, MAY, JUN, JUL, AGO, SEP, OCT,
+  NOV, DIC. Ejemplo: "ENE_05-01-2030 al 11-01-2030.xlsx".
+
+ENTREGABLE:
+- Un archivo .xlsx por cada semana del/los anio(s) indicado(s).
+- Empaqueta todos en un archivo .zip.
+- Manten el formato original (bordes, sombreado de encabezados, formato
+  de fecha en la columna B) y la misma estructura de 55 columnas.
+
+Genera ahora los archivos para: serie <BH-4S-181334>, hoja <CMexport54977>,
+anio <2030>, filas entre <15> y <60>.
+
+===== FIN DEL PROMPT =====
+------------------------------------------------------------------------
+
+ATAJO PARA IAs QUE EJECUTAN PYTHON
+----------------------------------
+En este mismo repositorio se incluye el script "generar_registros.py" y
+la plantilla original en la carpeta "plantilla/". Con eso, cualquier IA
+(o tu mismo) puede generar todo sin re-describir el formato. Ejemplo de
+uso (desde la carpeta que contiene la plantilla):
+
+  # Dispositivo BH-4S-181334, hoja CM, anio 2030, filas 15-60
+  SERIAL="BH-4S-181334" SHEET_NAME="CMexport54977" \
+    OUTDIR="salida/BH-4S-181334/2030" \
+    VARY_ROWS=1 ROW_MIN=15 ROW_MAX=60 YEAR=2030 \
+    python3 generar_registros.py
+
+  # Dispositivo MA215-012525, hoja FM, anio 2030
+  SERIAL="MA215-012525" SHEET_NAME="FMexport54977" \
+    OUTDIR="salida/MA215-012525/2030" \
+    VARY_ROWS=1 ROW_MIN=15 ROW_MAX=60 YEAR=2030 \
+    python3 generar_registros.py
+
+Parametros por variables de entorno:
+  SERIAL      numero de serie (columna A)
+  SHEET_NAME  nombre de la hoja
+  YEAR        anio a generar
+  MES_INI/MES_FIN  rango de meses (1..12), por defecto 1 y 12
+  VARY_ROWS   "1" para filas variables; "0" para dejar las de la plantilla
+  ROW_MIN/ROW_MAX  rango de filas cuando VARY_ROWS=1
+  OUTDIR      carpeta de salida
+
+El script solo usa la biblioteca estandar de Python (no requiere instalar
+nada) y necesita el archivo de plantilla en "plantilla/".
